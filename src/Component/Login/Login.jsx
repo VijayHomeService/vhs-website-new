@@ -79,6 +79,7 @@ function Signup() {
         alert("Successful login");
         setUser(response.data.user);
         localStorage.setItem("user", JSON.stringify(response.data.user));
+
         navigate("/cart", {
           state: { city: city },
         });
@@ -115,7 +116,7 @@ function Signup() {
                 style={{ justifyContent: "center", alignItems: "center" }}
               >
                 <img
-                  src="./images/vhs.png"
+                  src="./images/vhs.webp"
                   style={{
                     width: "110px",
                     height: "90px",
@@ -180,23 +181,28 @@ function Signup() {
             </div>
           </div>
         </div>
+             
+               {/* New Text Content with Auto Pulse Effect */}
+               <div
+          className="text-container"
+          style={{
+            textAlign: "center",
+            marginTop: "0.5in", // 0.5-inch gap between login container and text
+            fontSize: "27px", // Font size set to 27px
+            fontWeight: "1000", // Make font bold
+            fontFamily: "Poppins, sans-serif", // Apply Poppins font
+            animation: "pulse 1s infinite", // Apply pulse effect automatically
+          }}
+        >
+          <p style={{ margin: "0", color: "#004aad" }}>
+            "We offer <span style={{ color: "#960f14" }}>Top Quality</span>
+          </p>
+          <p style={{ margin: "0", color: "#004aad" }}>Services"</p>
+        </div>
       </div>
 
-      <div
-        className="text-container"
-        style={{
-          textAlign: "center",
-          marginTop: "0.5in", // 0.5-inch gap between login container and text
-          fontSize: "27px", // Font size set to 27px
-          fontWeight: "1000", // Make font bold
-          fontFamily: "Poppins, sans-serif", // Apply Poppins font
-          animation: "pulse 1s infinite", // Apply pulse effect automatically
-        }}
-      >
-        <p style={{ margin: "0", color: "#004aad" }}>
-          "Diwali Ki <span style={{ color: "#960f14" }}>SAFAI</span>
-        </p>
-        <p style={{ margin: "0", color: "#004aad" }}>Hamare Sath"</p>
+      <div>
+        {/* Inline CSS for Pulse Animation */}
         <style>
           {`
             @keyframes pulse {
@@ -210,7 +216,20 @@ function Signup() {
                 transform: scale(1);
               }
             }
+            .text-container {
+        animation: pulse 1s infinite;
+        will-change: transform;
+      }
+
+      /* Media query for mobile devices */
+      @media (max-width: 767px) {
+        .text-container {
+          font-size: 20px; /* Adjust font size for mobile */
+          animation: pulse 1.5s infinite; /* Slightly slower animation for mobile */
+        }
+      }  
           `}
+
         </style>
       </div>
     </div>

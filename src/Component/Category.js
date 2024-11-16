@@ -5,10 +5,12 @@ import Footer from "./Footer";
 import NavbarCompo from "./navbar";
 import Homenavbar from "./Homenavbar";
 
+
 const Category = () => {
   const { data } = useParams();
   const [subcategoryData, setSubcategoryData] = useState([]);
   const [city, setCity] = useState("");
+
 
   const capitalizeFirstLetter = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -69,16 +71,18 @@ const Category = () => {
           {subcategoryData.map((ele, index) => (
             <div className="col-md-3 mt-3" key={index}>
               <Link
-                to={{
-                  pathname: `/service/${ele.subcategory
-                    .toLowerCase()
-                    .replace(/ /g, "-")}-in-${city
-                    .toLowerCase()
-                    .replace(/ /g, "-")}`,
-                  state: { data: ele },
-                }}
-                className="text-decoration-none text-black"
-              >
+  to={{
+    pathname: `/service/${ele.subcategory
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/-in/g, "")}-in-${city
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/-in/g, "")}`,
+    state: { data: ele },
+  }}
+  className="text-decoration-none text-black"
+>
                 <div
                   style={{
                     display: "flex",

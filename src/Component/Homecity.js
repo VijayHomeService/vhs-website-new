@@ -30,6 +30,7 @@ import hbanner3 from "../assests/hbanner3.jpg";
 import hbanner4 from "../assests/hbanner4.jpg";
 import hbanner5 from "../assests/hbanner5.jpg";
 import hbanner6 from "../assests/hbanner6.jpg";
+import diwaliholiday from "../assests/diwali-holiday.jpeg";
 import { useSelector, useDispatch } from "react-redux";
 import { FreeMode, Pagination, Autoplay, Navigation } from "swiper/modules";
 import { useLocation } from "react-router-dom";
@@ -38,6 +39,13 @@ import moment from "moment";
 import Homenavbar from "./Homenavbar";
 import callgif from "../assests/callgif.gif";
 import { Carousel } from "bootstrap";
+
+
+// import for SEO
+import { Helmet } from 'react-helmet';
+
+// import for videos below thoughfull creation or Of our finest experiences
+import { FaPlay, FaPause } from "react-icons/fa"; // Font Awesome icons
 
 // updated home
 export default function Homecity() {
@@ -77,6 +85,41 @@ export default function Homecity() {
   const [slidesbanner, setslidesbanner] = useState(5);
   const [isMobile, setIsMobile] = useState(false);
   const [testi, settesti] = useState([]);
+  const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
+
+  // Now use `capitalizedCityName` for the dynamic metadata
+  const title = `Expert Home Services in ${capitalizedCityName} with Upto 50% OFF | Cleaning, Painting & More`;
+  const description = `Discover top-quality Home Services with Vijay Home Services. From cleaning and painting to pest control and appliance repairs, get trusted professionals at your doorstep. Enjoy affordable rates, free cancellation, and easy rescheduling.`;
+  const keywords = `home services near me, services for home, home service ${capitalizedCityName}, cleaning services ${capitalizedCityName}`;
+  
+
+// For videos --------------------------------------------------------------------------
+// Add the following code here inside the component function
+
+const [isPlaying, setIsPlaying] = useState(null);
+
+// Function to toggle play/pause for a specific video
+const togglePlayPause = (index) => {
+  const video = document.getElementById(`video-${index}`);
+
+  if (isPlaying === index) {
+    video.pause();
+    setIsPlaying(null); // Pause the video and reset state
+  } else {
+    video.play();
+    setIsPlaying(index); // Play the selected video
+  }
+};
+
+// Handle video end to reset play/pause state
+const handleVideoEnd = (index) => {
+  setIsPlaying(null);
+};
+// Continue with other hooks or logic for your component----------------------------------------------------------------------
+
+
+
+
 
   const queryString = window.location.search;
 
@@ -683,9 +726,46 @@ export default function Homecity() {
     }
   };
 
+
+  // Structured Data 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "serviceType": `Expert Home Services in ${cityName} with Upto 50% OFF | Cleaning, Painting & More`,
+    "provider": {
+      "@type": "Product",
+      "name": "Vijay Home Services",
+      "brand": {
+          "@type": "Brand",
+          "name": "Vijay Home Services"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "DTDC Building 3rd Floor,",
+        "addressLocality": "Mahadevapura Outer Ring Road",
+        "addressRegion": "Bengaluru,Karnataka",
+        "postalCode": "560048",
+        "addressCountry": "India"
+      },
+      "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "bestRating": "5",
+          "worstRating": "1",
+          "ratingCount": "226687"
+        },
+      "telephone": "+1234567890",
+      "url": "https://yourwebsite.com",
+      "logo": "https://www.vijayhomeservices.com/favicon.ico"
+    },
+    "description":  `Discover top-quality Home Services with Vijay Home Services. From cleaning and painting to pest control and appliance repairs, get trusted professionals at your doorstep. Enjoy affordable rates, free cancellation, and easy rescheduling.`,
+    "keywords": `home services near me, services for home, home service ${cityName}, cleaning services ${cityName}`
+  };
+
+  console.log(structuredData);
   return (
-    <>
-      {isLoading ? (
+     <>
+    {isLoading ? (
         <>
           <div className="row m-auto text-center" style={{ height: "100vh" }}>
             <div className="col-md-4"></div>
@@ -921,51 +1001,72 @@ export default function Homecity() {
                 <div className="poppins-medium-italic thoughttext mt-1 mb-4">
                   Of our finest experiences
                 </div>
-
                 <Swiper
-                  slidesPerView={slidesthoughtfull1}
-                  spaceBetween={30}
-                  freeMode={true}
-                  pagination={{
-                    clickable: true,
-                  }}
-                  autoplay={{
-                    delay: 2500,
-                    disableOnInteraction: false,
-                  }}
-                  modules={[FreeMode, Pagination, Autoplay]}
-                  className="mySwiper"
-                >
-                  <div
-                    className="col-md-4"
-                    style={{ width: "100%", padding: "15px" }}
-                  >
-                    {thoughtfull.map((data) => (
-                      <SwiperSlide
-                        key={data._id}
-                        style={{
-                          backgroundColor: "white",
-                          padding: "0px",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "flex-start",
-                        }}
-                      >
-                        <video
-                          onClick={handleShow}
-                          src={data.creationslink}
-                          style={{ borderRadius: "10px" }}
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                          className="thoughtfull-img"
-                        ></video>
-                      </SwiperSlide>
-                    ))}
-                  </div>
-                </Swiper>
+      slidesPerView={slidesthoughtfull1}
+      spaceBetween={30}
+      freeMode={true}
+      pagination={{
+        clickable: true,
+      }}
+      autoplay={{
+        delay: 2500,
+        disableOnInteraction: false,
+      }}
+      modules={[FreeMode, Pagination, Autoplay]}
+      className="mySwiper"
+    >
+      <div className="col-md-4" style={{ width: "100%", padding: "15px" }}>
+        {thoughtfull.map((data, index) => (
+          <SwiperSlide
+            key={data._id}
+            style={{
+              backgroundColor: "white",
+              padding: "0px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
+            {/* Video Container */}
+            <div style={{ position: "relative", width: "100%" }}>
+              <video
+                id={`video-${index}`}
+                src={data.creationslink}
+                style={{
+                  borderRadius: "10px",
+                  width: "100%",
+                  height: "auto",
+                }}
+                muted
+                playsInline
+                onClick={() => togglePlayPause(index)}
+                onEnded={() => handleVideoEnd(index)}
+              />
+
+              {/* Play/Pause Icon */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  color: "rgba(255, 255, 255, 0.5)", // More transparent
+                  fontSize: "30px", // Smaller icon size
+                  cursor: "pointer",
+                  opacity: 0.7, // Adjust the transparency
+                }}
+                onClick={() => togglePlayPause(index)}
+              >
+                {isPlaying === index ? <FaPause /> : <FaPlay />}
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </div>
+    </Swiper>
+
+
               </div>
               <div className="row mt-4">
                 <div
@@ -1965,20 +2066,8 @@ export default function Homecity() {
                       }}
                     >
                       <Link
-                        // to={{
-                        //   pathname: generatePathname(i.subcategory, city),
-                        // }}
                         to={{
-                          pathname:
-                            i.category === "Packers & Movers"
-                              ? `/packers-movers${
-                                  typeof city === "string"
-                                    ? `/${city
-                                        .toLowerCase()
-                                        .replace(/ /g, "-")}`
-                                    : ""
-                                }`
-                              : generatePathname(i.subcategory, city),
+                          pathname: generatePathname(i.subcategory, city),
                         }}
                         state={({ subcategory: i?.subcategory }, { data: i })}
                         key={i.subcategory}
@@ -2048,20 +2137,8 @@ export default function Homecity() {
                     >
                       <Link
                         to={{
-                          pathname:
-                            i.category === "Packers & Movers"
-                              ? `/packers-movers${
-                                  typeof city === "string"
-                                    ? `/${city
-                                        .toLowerCase()
-                                        .replace(/ /g, "-")}`
-                                    : ""
-                                }`
-                              : generatePathname(i.subcategory, city),
+                          pathname: generatePathname(i.subcategory, city),
                         }}
-                        // to={{
-                        //   pathname: generatePathname(i.subcategory, city),
-                        // }}
                         state={({ subcategory: i?.subcategory }, { data: i })}
                         key={i.subcategory}
                         style={{ textDecoration: "none" }}
@@ -2094,54 +2171,6 @@ export default function Homecity() {
           </div>
 
           <div className="home_mobileview">
-            <div className="">
-              <div
-                id="carouselExample1"
-                className="carousel slide"
-                data-bs-ride="carousel"
-                data-bs-interval="3000"
-              >
-                <div className="carousel-inner">
-                  {bannerdata.map((data, index) => (
-                    <div
-                      key={index}
-                      className={`carousel-item ${index === 0 ? "active" : ""}`}
-                    >
-                      <img
-                        src={data.mobilebanner}
-                        className="d-block w-100"
-                        alt={`Banner ${index + 1}`}
-                        style={{ height: "200px", width: "330px" }}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <button
-                  className="carousel-control-prev"
-                  type="button"
-                  data-bs-target="#carouselExample1"
-                  data-bs-slide="prev"
-                >
-                  <span
-                    className="carousel-control-prev-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button
-                  className="carousel-control-next"
-                  type="button"
-                  data-bs-target="#carouselExample1"
-                  data-bs-slide="next"
-                >
-                  <span
-                    className="carousel-control-next-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
-              </div>
-            </div>
             <div className="" style={{ width: "100%" }}>
               <input
                 type="text"
@@ -2866,20 +2895,8 @@ export default function Homecity() {
                   .map((i) => (
                     <div className="col-3" key={i._id}>
                       <Link
-                        // to={{
-                        //   pathname: generatePathname(i.subcategory, city),
-                        // }}
                         to={{
-                          pathname:
-                            i.category === "Packers & Movers"
-                              ? `/packers-movers${
-                                  typeof city === "string"
-                                    ? `/${city
-                                        .toLowerCase()
-                                        .replace(/ /g, "-")}`
-                                    : ""
-                                }`
-                              : generatePathname(i.subcategory, city),
+                          pathname: generatePathname(i.subcategory, city),
                         }}
                         state={({ subcategory: i?.subcategory }, { data: i })}
                         key={i.subcategory}
@@ -2924,20 +2941,8 @@ export default function Homecity() {
                   .map((i) => (
                     <div className="col-3" key={i._id}>
                       <Link
-                        // to={{
-                        //   pathname: generatePathname(i.subcategory, city),
-                        // }}
                         to={{
-                          pathname:
-                            i.category === "Packers & Movers"
-                              ? `/packers-movers${
-                                  typeof city === "string"
-                                    ? `/${city
-                                        .toLowerCase()
-                                        .replace(/ /g, "-")}`
-                                    : ""
-                                }`
-                              : generatePathname(i.subcategory, city),
+                          pathname: generatePathname(i.subcategory, city),
                         }}
                         state={({ subcategory: i?.subcategory }, { data: i })}
                         key={i.subcategory}
@@ -3228,7 +3233,7 @@ export default function Homecity() {
           <div className="modal_grid">
             <div className="modal_header">
               <img
-                src="https://vijayahomeservices.b-cdn.net/city.jpg"
+                src="https://vijayahomeservices.b-cdn.net/city1.webp"
                 alt="city images"
                 className="city_images"
               />
@@ -3389,6 +3394,19 @@ export default function Homecity() {
           </div>
         </Modal.Body>
       </Modal>
+
+      { /* SEO return */}
+      <div> 
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href = {`https://www.vijayhomeservices.com/${cityName}`} />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+      </Helmet>
+    </div>
+
     </>
   );
 }

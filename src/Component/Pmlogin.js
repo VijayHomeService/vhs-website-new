@@ -206,9 +206,9 @@ function Pmlogin() {
         }}
       >
         <p style={{ margin: "0", color: "#004aad" }}>
-          "Diwali Ki <span style={{ color: "#960f14" }}>SAFAI</span>
+          "We offer <span style={{ color: "#960f14" }}>Top Quality</span>
         </p>
-        <p style={{ margin: "0", color: "#004aad" }}>Hamare Sath"</p>
+        <p style={{ margin: "0", color: "#004aad" }}>Services"</p>
         <style>
           {`
             @keyframes pulse {

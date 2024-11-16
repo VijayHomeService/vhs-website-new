@@ -91,7 +91,7 @@ function Homelogin() {
                     // fontWeight: "bold",
                   }}
                 >
-                  Login With Mobile Number
+                  Book With Mobile Number
                 </div>
 
                 <input
@@ -138,9 +138,51 @@ function Homelogin() {
             </div>
           </div>
         </div>
+      
+        {/* New Text Content with Auto Pulse Effect */}
+        <div
+          className="text-container"
+          style={{
+            textAlign: "center",
+            marginTop: "0.5in", // 0.5-inch gap between login container and text
+            fontSize: "27px", // Font size set to 27px
+            fontWeight: "1000", // Make font bold
+            fontFamily: "Poppins, sans-serif", // Apply Poppins font
+            animation: "pulse 1s infinite", // Apply pulse effect automatically
+          }}
+        >
+          <p style={{ margin: "0", color: "#004aad" }}>
+            "We offer <span style={{ color: "#960f14" }}>Top Quality</span>
+          </p>
+          <p style={{ margin: "0", color: "#004aad" }}>Services"</p>
+        </div>
+      </div>
+
+      <div>
+        {/* Inline CSS for Pulse Animation */}
+        <style>
+          {`
+            @keyframes pulse {
+              0% {
+                transform: scale(1);
+              }
+              50% {
+                transform: scale(1.1);
+              }
+              100% {
+                transform: scale(1);
+              }
+            }
+             
+          `}
+
+        </style>
       </div>
     </div>
   );
 }
+   
+  
+
 
 export default Homelogin;

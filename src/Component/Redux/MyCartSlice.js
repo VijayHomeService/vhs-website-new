@@ -1,18 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const loadState2 = () => {
-  try {
-    const serializedState = localStorage.getItem("addons");
-    return serializedState ? JSON.parse(serializedState) : [];
-  } catch (e) {
-    console.warn("Could not load state", e);
-    return [];
-  }
-};
-
 const MyCartSlice1 = createSlice({
   name: "addons",
-  initialState: loadState2(),
+  initialState: [],
   reducers: {
     addToCartaddon(state, action) {
       const itemIndex = state.findIndex(

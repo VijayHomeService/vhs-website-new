@@ -40,6 +40,8 @@ import callgif from "../assests/callgif.gif";
 import { Carousel } from "bootstrap";
 import loaderimage from "../../src/assests/loaderimage.gif";
 
+
+
 // updated home
 export default function Homecity() {
   const [Banner, setBanner] = useState([]);
@@ -80,6 +82,46 @@ export default function Homecity() {
   const [testi, settesti] = useState([]);
 
   const queryString = window.location.search;
+
+// For videos --------------------------------------------------------------------------
+// State management for video play/pause and progress
+const [isPlaying, setIsPlaying] = useState(null); // Tracks play/pause state for each video
+const [progress, setProgress] = useState({}); // Tracks video progress for each video
+
+// Function to toggle play/pause for a specific video
+const togglePlayPause = (index) => {
+  const video = document.getElementById(`video-${index}`);
+
+  if (isPlaying === index) {
+    video.pause();
+    setIsPlaying(null); // Pause the video and reset state
+  } else {
+    video.play();
+    setIsPlaying(index); // Play the selected video
+  }
+};
+
+// Function to update progress for a specific video
+const updateProgress = (index) => {
+  const video = document.getElementById(`video-${index}`);
+  const percentage = (video.currentTime / video.duration) * 100;
+  setProgress((prev) => ({
+    ...prev,
+    [index]: percentage, // Update the progress for each video
+  }));
+};
+
+// Handle video end to reset play/pause state
+const handleVideoEnd = (index) => {
+  setIsPlaying(null);
+  setProgress((prev) => ({
+    ...prev,
+    [index]: 0, // Reset progress when video ends
+  }));
+};
+
+// Continue with other hooks or logic for your component----------------------------------------------------------------------
+
 
   console.log("queryString", queryString);
 
@@ -1084,53 +1126,91 @@ export default function Homecity() {
                 <div className="poppins-medium-italic thoughttext mt-1 mb-4">
                   Of our finest experiences
                 </div>
+// Replacing with new code ----------------------------------------------------------------
 
-                <Swiper
-                  slidesPerView={slidesthoughtfull1}
-                  spaceBetween={30}
-                  freeMode={true}
-                  pagination={{
-                    clickable: true,
-                  }}
-                  autoplay={{
-                    delay: 2500,
-                    disableOnInteraction: false,
-                  }}
-                  modules={[FreeMode, Pagination, Autoplay]}
-                  className="mySwiper"
-                >
-                  <div
-                    className="col-md-4"
-                    style={{ width: "100%", padding: "15px" }}
-                  >
-                    {thoughtfull.map((data) => (
-                      <SwiperSlide
-                        key={data._id}
-                        style={{
-                          backgroundColor: "white",
-                          padding: "0px",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "flex-start",
-                        }}
-                      >
-                        <video
-                          onClick={handleShow}
-                          src={data.creationslink}
-                          // width="200px"
-                          // height="300px"
-                          style={{ borderRadius: "10px" }}
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                          className="thoughtfull-img"
-                        ></video>
-                      </SwiperSlide>
-                    ))}
-                  </div>
-                </Swiper>
+
+return (
+  <Swiper
+    slidesPerView={slidesthoughtfull1}
+    spaceBetween={30}
+    freeMode={true}
+    pagination={{
+      clickable: true,
+    }}
+    autoplay={{
+      delay: 2500,
+      disableOnInteraction: false,
+    }}
+    modules={[FreeMode, Pagination, Autoplay]}
+    className="mySwiper"
+  >
+    <div className="col-md-4" style={{ width: "100%", padding: "15px" }}>
+      {thoughtfull.map((data, index) => (
+        <SwiperSlide
+          key={data._id}
+          style={{
+            backgroundColor: "white",
+            padding: "0px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "flex-start",
+          }}
+        >
+          {/* Video Player */}
+          <video
+            id={`video-${index}`} // Unique ID for each video
+            src={data.creationslink}
+            style={{ borderRadius: "10px", width: "200px", height: "300px" }}
+            muted
+            playsInline
+            onClick={() => togglePlayPause(index)} // Toggle play/pause on click
+            onTimeUpdate={() => updateProgress(index)} // Update progress bar
+            onEnded={() => handleVideoEnd(index)} // Reset state on video end
+          />
+
+          {/* Play/Pause Button */}
+          <div style={{ marginTop: "10px" }}>
+            <button onClick={() => togglePlayPause(index)}>
+              {isPlaying === index ? "Pause" : "Play"}
+            </button>
+          </div>
+
+          {/* Progress Bar */}
+          <div
+            style={{
+              height: "5px",
+              width: "100%",
+              backgroundColor: "#ddd",
+              borderRadius: "5px",
+              marginTop: "10px",
+              cursor: "pointer",
+            }}
+            onClick={(e) => {
+              const video = document.getElementById(`video-${index}`);
+              const rect = e.target.getBoundingClientRect();
+              const clickPosition = e.clientX - rect.left;
+              const newTime = (clickPosition / rect.width) * video.duration;
+              video.currentTime = newTime; // Seek video to clicked position
+            }}
+          >
+            <div
+              style={{
+                height: "100%",
+                width: `${progress[index] || 0}%`,
+                backgroundColor: "#76c7c0",
+                borderRadius: "5px",
+              }}
+            ></div>
+          </div>
+        </SwiperSlide>
+      ))}
+    </div>
+  </Swiper>
+);
+
+
+// -------------------------------------------------------------------------------------
               </div>
               <div className="row mt-4">
                 <div

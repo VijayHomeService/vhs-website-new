@@ -39,12 +39,6 @@ function Viewdetails() {
   const location = useLocation();
   const { subcategory, city } = location.state || {};
   const localstoragecitys = localStorage.getItem("city");
-  const Tagdata = localStorage.getItem("Tag");
-  console.log("Tagdata", Tagdata);
-
-  const currentURLdata = localStorage.getItem("currentURL");
-
-  console.log("Current URL stored in localStorage:", currentURLdata);
 
   console.log("subcategory", subcategory);
 
@@ -75,13 +69,6 @@ function Viewdetails() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const localutm = localStorage.getItem("utm_source");
-  console.log("localutm", localutm);
-  const localutmcampaign = localStorage.getItem("utm_campaign");
-  console.log("localutmcampaign", localutmcampaign);
-  const localutmcontent = localStorage.getItem("utm_content");
-  console.log("localutmcontent", localutmcontent);
 
   useEffect(() => {
     const handlebanner = () => {
@@ -123,8 +110,6 @@ function Viewdetails() {
     getsvideo();
   }, []);
 
-  console.log("subcategory?.serviceName", subcategory?.serviceName);
-
   const addEnquiry = async (e) => {
     e.preventDefault();
 
@@ -141,20 +126,13 @@ function Viewdetails() {
           data: {
             date: enquirydate,
             name: name,
-            Time: moment().format("h:mm:ss a"),
+            time: moment().format("h:mm:ss a"),
             mobile: contact1,
             email: email,
             category: subcategory?.category,
-            reference1: "website",
-            reference2: localutm,
-            // reference3: localutmcampaign,
-            reference5: localutmcampaign,
-            reference4: localutmcontent,
+            reference2: "website",
             city: city,
             comment: comment,
-            intrestedfor: subcategory?.serviceName,
-            Tag: Tagdata,
-
             // interestedFor: serviceName,
             // serviceID: serviceId,
             // responseType: getTemplateDetails, // Ensure this matches your data structure
@@ -166,8 +144,6 @@ function Viewdetails() {
         if (response.status === 200) {
           const data = response.data.data;
           alert("Enquiry added successfully:", data);
-          addenquiryfollowup1(response.data.data);
-
           setShow(false);
           // window.location.assign("/");
         }
@@ -436,13 +412,6 @@ function Viewdetails() {
           date: moment().format("MM-DD-YYYY"),
           Time: moment().format("h:mm:ss a"),
           reference1: "website",
-          reference2: localutm,
-          // reference3: localutmcampaign,
-          reference5: localutmcampaign,
-          reference4: localutmcontent,
-          intrestedfor: subcategory?.serviceName,
-          Tag: Tagdata,
-          // interestedFor
         },
       };
 
@@ -482,7 +451,7 @@ function Viewdetails() {
         data: {
           EnquiryId: edata?.EnquiryId,
           folldate: moment().format("llll"),
-          response: "New",
+          response: "Survey",
           category: "Painting",
           city: city,
           nxtfoll: moment().format("YYYY-MM-DD"),
@@ -506,20 +475,6 @@ function Viewdetails() {
       <Header1 />
       <Cartnavbar />
       <div className="col-md-12">
-        <div className="mobile-view-banner">
-          <img
-            // className="view_image"
-            src={subcategory?.mobilebanner}
-            alt=""
-            style={{
-              width: "100%",
-              height: "150px",
-              paddingLeft: "20px",
-              paddingRight: "20px",
-            }}
-            // src={`https://api.vijayhomesuperadmin.in/service/${subcategory?.serviceImg}`}
-          />
-        </div>
         <div className="container">
           <div className="web-view-banner">
             <img
@@ -527,6 +482,16 @@ function Viewdetails() {
               src={subcategory?.viewbanner}
               alt=""
               style={{ width: "100%" }}
+              // src={`https://api.vijayhomesuperadmin.in/service/${subcategory?.serviceImg}`}
+            />
+          </div>
+
+          <div className="mobile-view-banner">
+            <img
+              className="view_image"
+              src={subcategory?.mobilebanner}
+              alt=""
+              style={{ width: "100%", height: "150px" }}
               // src={`https://api.vijayhomesuperadmin.in/service/${subcategory?.serviceImg}`}
             />
           </div>
@@ -567,10 +532,7 @@ function Viewdetails() {
 
                 <div style={{ marginLeft: "40px" }}>
                   <a
-                    // href="https://wa.me/919611600990?text=Hi%20I'm%20looking%20for%20the%20services%20from%20you,%20Please%20reach%20out%20to%20me%20soon"
-                    href={`https://wa.me/919611600990?text=Hi%20I'm%20looking%20for%20the%20services%20from%20you,%20Please%20reach%20out%20to%20me%20soon.%20${encodeURIComponent(
-                      currentURLdata
-                    )}`}
+                    href="https://wa.me/919611600990?text=Hi%20I'm%20looking%20for%20the%20services%20from%20you,%20Please%20reach%20out%20to%20me%20soon"
                     style={{
                       textDecoration: "none",
                       color: "inherit",
@@ -731,7 +693,6 @@ function Viewdetails() {
                         marginTop: "10px",
                         color: "white",
                         textAlign: "center",
-                        cursor: "pointer",
                       }}
                     >
                       Submit for FREE quotation
@@ -891,9 +852,7 @@ function Viewdetails() {
                                 textOverflow: "ellipsis",
                               }}
                             >
-                              {subcategory?.category === "Painting"
-                                ? "Free Estimate"
-                                : "Add"}
+                              Book
                             </button>
                           )}
 

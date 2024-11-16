@@ -6,6 +6,7 @@ function Esuccess() {
   const location = useLocation();
 
   const { data, appoTime, appoDate } = location.state || {};
+  console.log("data", data, appoTime, appoDate);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => {
@@ -16,7 +17,7 @@ function Esuccess() {
   // }, []);
 
   const handlechange = () => {
-    window.location.href = "/thank-you"; // Redirect to home page after 3 seconds
+    window.location.href = "/"; // Redirect to home page after 3 seconds
   };
   return (
     <div className="container">

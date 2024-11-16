@@ -1,9 +1,11 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 function Success() {
   const location = useLocation();
   const { data } = location.state || {};
   console.log("data", data);
+
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -17,15 +19,18 @@ function Success() {
               src={require("../Assets/Images/a.mp4")}
             ></video>
           </div>
+
+          {/* Category */}
           <div className="row">
             <div className="col-md-4">
-              <div className="">category</div>
+              <div className="">Category</div>
             </div>
             <div className="col-md-8">
               <div className="">{data.category}</div>
             </div>
           </div>
 
+          {/* Other details */}
           <div className="row mt-3">
             <div className="col-md-4">
               <div className="">Service</div>
@@ -98,6 +103,7 @@ function Success() {
             </div>
           </div>
 
+          {/* Success Button */}
           <div
             onClick={() => window.location.assign("/")}
             className="mt-5"
@@ -114,9 +120,27 @@ function Success() {
           >
             Success
           </div>
+
+          {/* Offer Alert Section */}
+          <div className="mt-5 text-center">
+            <h4>Offer Alert!</h4>
+            <a href="/services/painting-services">
+              <video
+                style={{ width: "100%", height: "auto", cursor: "pointer" }}
+                autoPlay
+                loop
+                muted
+                src={require("../Assets/Images/offer video.webm")}
+              ></video>
+            </a>
+            <p className="mt-2" style={{ fontWeight: "bold", color: "darkred" }}>
+              Click the video to explore our painting services!
+            </p>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
 export default Success;

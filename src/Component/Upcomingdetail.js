@@ -33,7 +33,7 @@ function Upcomingdetail() {
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     // setserviceDate(new Date(dateString).toLocaleDateString(undefined, options))
-
+    console.log(new Date(dateString).toLocaleDateString(undefined, options));
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
   const [show6, setShow6] = useState(false);
@@ -64,6 +64,7 @@ function Upcomingdetail() {
       console.error("Error fetching service orders: ", error);
     }
   };
+  console.log("allorder====", allorder);
 
   const updateddata = {
     paymentDate: moment().format("YYYY-MM-DD"),
@@ -79,6 +80,8 @@ function Upcomingdetail() {
     transactionId: "T" + Date.now(),
   };
 
+  console.log("value?._id", value?._id);
+
   const handlePayment = async (e) => {
     e.preventDefault();
     try {
@@ -86,6 +89,7 @@ function Upcomingdetail() {
         "https://api.vijayhomeservicebengaluru.in/api/payment/upcomingpayment",
         updateddata
       );
+      console.log("Response:", res.data);
 
       if (res.status === 200 && res.data.redirectUrl) {
         setpaymentModel(true);

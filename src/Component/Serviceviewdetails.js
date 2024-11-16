@@ -969,7 +969,7 @@ function Serviceviewdetails() {
                             borderRadius: "10px",
                           }}
                           height={300}
-                          autoPlay
+                          //autoPlay
                           loop
                           src={`https://api.vijayhomesuperadmin.in/sVideo/${svideodata[0]?.serviceVideo}`}
                         ></video>
@@ -983,7 +983,7 @@ function Serviceviewdetails() {
                             borderRadius: "10px",
                           }}
                           height={300}
-                          autoPlay
+                          // autoPlay
                           loop
                           src={`https://api.vijayhomesuperadmin.in/sVideo/${svideodata[1]?.serviceVideo}`}
                         ></video>

@@ -1,0 +1,50 @@
+/* DeepCleaningServicePage.css */
+.content-mapping {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    
+}
+
+.content-mapping h4 {
+    color: black;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.content-mapping h6 {
+    color: black;
+    font-size: 1em;
+    margin-top: 30px;
+    font-weight: bold;
+}
+
+.content-mapping p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.content-mapping ul {
+    list-style-type: none; /* Remove default bullets */
+    padding-left: 20px;
+    margin-top: 20px;
+}
+
+.content-mapping ul li::before {
+    content: '\f005'; /* Unicode for Font Awesome solid star */
+    font-family: "Font Awesome 6 Free"; /* Make sure the correct Font Awesome version is used */
+    font-weight: 900; /* For solid icons */
+    color: green; /* Set the color of the star */
+    margin-right: 10px; /* Space between the star and the text */
+    font-size: 14px; /* Adjust size as needed */
+}
+
+.content-mapping ul li {
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}

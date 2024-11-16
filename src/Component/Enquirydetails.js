@@ -7,7 +7,7 @@ import Homenavbar from "./Homenavbar";
 function Enquirydetails() {
   const location = useLocation();
   const { enquirydata } = location.state || {};
-
+  console.log("enquirydata=====suman", enquirydata);
   const [technician, setTechnisian] = useState([]);
 
   const handleQuotationLink = (enquirydata) => {

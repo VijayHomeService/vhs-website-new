@@ -21,7 +21,6 @@ import Pheader from "./Pheader";
 import Pmheader from "./Pmheader";
 import Pmobileheader from "./Pmobileheader";
 import { useLocation, useNavigate } from "react-router-dom";
-import pcity from "../../src/assets1/pcity.jpg";
 import pcity1 from "../../src/assets1/pcity1.jpg";
 import pcity2 from "../../src/assets1/pcity2.jpg";
 // importing react-helmet
@@ -55,48 +54,30 @@ function Packersmovershome() {
   const [pickupLocationLng, setPickupLocationLng] = useState(null);
   const [dropLocationLat, setDropLocationLat] = useState(null);
   const [dropLocationLng, setDropLocationLng] = useState(null);
-  const [pmbannerdata, setpmbannerdata] = useState([]);
   const location = useLocation();
   const { cityName } = location.state || {};
 
-  function deg2rad(deg) {
-    return deg * (Math.PI / 180);
-  }
-
-  function haversineDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Earth's radius in kilometers
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) *
-        Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c;
-    return distance;
-  }
-
-  const distanceInKm = haversineDistance(
-    pickupLocationLat,
-    pickupLocationLng,
-    dropLocationLat,
-    dropLocationLng
-  );
-
-  console.log("distanceInKm", distanceInKm);
-
   const userString = localStorage.getItem("user");
   const user = JSON.parse(userString);
+
+  console.log("user----", user?._id);
+
+  console.log("cityName=====suman", cityName);
 
   // SEO work for Mackers and Movers
   const { cityname } = useParams(); // Fetch city name from URL parameters
 
   const metaTags = {
-    Ahmedabad: {
+    Default: {
+      title: "Packers and Movers | Call +91-8453748478",
+      description:
+        "Packers and Movers  offer comprehensive relocation services for residential and commercial needs, specializing in packing, loading, transporting, and unpacking goods with utmost care and efficiency.",
+      canonical: "https://vijayhomeservices.com/packers-movers",
+      keywords: "Packers and Movers , Movers and Packers ",
+      image:
+        "https://vijayahomeservices.b-cdn.net/Webp%20Format%E2%80%A6ategory/Packers%20%26%20Movers/Within%20City.webp",
+    },
+    /*Ahmedabad: {
       title: "Packers and Movers in Ahmedabad | Call +91-8453748478",
       description:
         "Packers and Movers in Ahmedabad offer comprehensive relocation services for residential and commercial needs, specializing in packing, loading, transporting, and unpacking goods with utmost care and efficiency.",
@@ -287,9 +268,10 @@ function Packersmovershome() {
       image:
         "https://vijayahomeservices.b-cdn.net/Webp%20Format%E2%80%A6ategory/Packers%20%26%20Movers/Within%20City.webp",
     },
+    */
   };
 
-  const currentMetaTags = metaTags[cityName] || metaTags["Bangalore"]; // Fallback to Mumbai if city not found
+  const currentMetaTags = metaTags[cityName] || metaTags["Default"]; // Fallback to Mumbai if city not found
 
   const [Data, setData] = useState([]);
   const autocompleteRef = useRef(null);
@@ -407,10 +389,6 @@ function Packersmovershome() {
 
     if (!pickupLocation || !dropLocation || !mobilenumber || !shiftingdate) {
       alert("Please enter all fields");
-    }
-    if (!/^\d{10}$/.test(mobilenumber)) {
-      alert("Please enter a valid 10-digit mobile number.");
-      return;
     } else {
       setLoading(true);
       try {
@@ -428,14 +406,13 @@ function Packersmovershome() {
             serviceDate: shiftingdate,
             userId: user?._id,
             type: "website",
-            distance: distanceInKm,
           },
         };
         const response = await axios(config);
 
         if (response.status === 200) {
           const data = response.data.data;
-          alert("Please select the list of items", data);
+          alert("Thank you we will contact you soon", data);
           // window.location.reload("");
           handleSubmit();
         }
@@ -518,9 +495,9 @@ function Packersmovershome() {
   };
 
   const bannerdata = [
-    { id: 1, webbanner: pcity },
-    { id: 2, webbanner: pcity1 },
-    { id: 3, webbanner: pcity2 },
+    
+    { id: 1, webbanner: pcity1 },
+    { id: 2, webbanner: pcity2 },
   ];
 
   const [cityData, setCityData] = useState(null);
@@ -538,21 +515,10 @@ function Packersmovershome() {
     setCityData(cityType); // Update city data when a city is selected
   };
 
-  useEffect(() => {
-    getbanner();
-  }, []);
+  console.log("cityData", cityData);
+  // Adding meta tags for SEO
 
-  const getbanner = async () => {
-    try {
-      const res = await axios.get(
-        "https://api.vijayhomeservice.com/api/pmbanner/getallpmbanner"
-      );
-      setpmbannerdata(res.data.banner);
-    } catch (error) {
-      console.log("Error in getbanner:", error);
-    }
-  };
-
+  // Return statements for SEO Packers and movers
   return (
     <div>
       <Helmet>
@@ -577,7 +543,7 @@ function Packersmovershome() {
             data-bs-interval="3000"
           >
             <div className="carousel-inner">
-              {pmbannerdata.map((data, index) => (
+              {bannerdata.map((data, index) => (
                 <div
                   key={index}
                   className={`carousel-item ${index === 0 ? "active" : ""}`}
@@ -619,52 +585,11 @@ function Packersmovershome() {
         </div>
 
         <div className="pm-mobile">
-          <div
-            id="carouselExample1"
-            className="carousel slide"
-            data-bs-ride="carousel"
-            data-bs-interval="3000"
-          >
-            <div className="carousel-inner">
-              {pmbannerdata.map((data, index) => (
-                <div
-                  key={index}
-                  className={`carousel-item ${index === 0 ? "active" : ""}`}
-                >
-                  <img
-                    src={data.mobilebanner}
-                    className="d-block w-100"
-                    alt={`Banner ${index + 1}`}
-                    style={{ height: "200px", width: "100%" }}
-                  />
-                </div>
-              ))}
-            </div>
-            <button
-              className="carousel-control-prev"
-              type="button"
-              data-bs-target="#carouselExample1"
-              data-bs-slide="prev"
-            >
-              <span
-                className="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span className="visually-hidden">Previous</span>
-            </button>
-            <button
-              className="carousel-control-next"
-              type="button"
-              data-bs-target="#carouselExample1"
-              data-bs-slide="next"
-            >
-              <span
-                className="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span className="visually-hidden">Next</span>
-            </button>
-          </div>
+          <img
+            src={pmmobile}
+            alt="loading"
+            style={{ width: "100%", height: "150px" }}
+          />
         </div>
 
         <div className="container">
@@ -863,20 +788,13 @@ function Packersmovershome() {
                 className="poppins-black"
                 placeholder="Enter Contact Details"
                 value={mobilenumber}
-                // onChange={(e) => {
-                //   // Only allow digits (0-9) to be entered
-                //   const value = e.target.value;
-                //   if (/^\d*$/.test(value)) {
-                //     setMobilenumber(value);
-                //   }
-                // }}
                 onChange={(e) => {
+                  // Only allow digits (0-9) to be entered
                   const value = e.target.value;
-                  if (/^\d{0,10}$/.test(value)) {
+                  if (/^\d*$/.test(value)) {
                     setMobilenumber(value);
                   }
                 }}
-                maxLength="10"
                 style={{
                   color: "grey",
                   fontSize: "12px",
@@ -2395,7 +2313,6 @@ function Packersmovershome() {
             </div>
           </div>
         </Modal>
-
         <Footer />
       </div>
     </div>

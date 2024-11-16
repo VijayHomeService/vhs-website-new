@@ -19,6 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { FreeMode, Pagination, Autoplay, Navigation } from "swiper/modules";
 import { useLocation } from "react-router-dom";
 
+
 // updated home
 export default function Home() {
   const [bannerdata, setBannerdata] = useState([]);
@@ -169,6 +170,7 @@ export default function Home() {
 
   return (
     <>
+   
       {isLoading ? (
         <>
           <div className="row m-auto text-center" style={{ height: "100vh" }}>
@@ -312,7 +314,7 @@ export default function Home() {
           <div className="modal_grid">
             <div className="modal_header">
               <img
-                src="https://vijayahomeservices.b-cdn.net/city.jpg"
+                src="https://vijayahomeservices.b-cdn.net/pcity1.webp"
                 alt="city images"
                 className="city_images"
               />

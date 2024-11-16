@@ -16,6 +16,19 @@ import Switch from "react-switch";
 const steps = ["Moving details", "Add Items", "Add ons", "Review"];
 
 export default function PserviceDetails() {
+  // Google conversion script for tracking
+  React.useEffect(() => {
+    const script = document.createElement('script');
+    script.innerHTML = `
+      gtag('event', 'conversion', {'send_to': 'AW-934679256/XXl5CMPnko0CENil2L0D'});
+    `;
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script); // Cleanup script when component unmounts
+    };
+  }, []);  // Runs when the component mounts
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [pickupLocation1, setPickupLocation1] = React.useState("");

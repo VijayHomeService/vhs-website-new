@@ -1,0 +1,47 @@
+/* DiwaliPopup.css */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    position: relative;
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 400px; /* Adjusted to a slightly larger width */
+    height: 400px; /* Adjusted to a slightly larger height */
+    max-width: 90%;
+    max-height: 80%;
+  }
+  
+  .popup-image {
+    max-width: 100%; /* Ensure the image fits within the width of the popup */
+    max-height: 60vh; /* Limit the height to prevent overflow */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px;
+    object-fit: cover; /* Ensure the image covers the area without stretching */
+  }
+  
+  .close-icon {
+    cursor: pointer;
+    font-size: 30px; /* Adjust size as needed */
+    position: absolute; /* Position it absolutely within the popup */
+    top: -12px; /* Distance from the top */
+    right: 10px; /* Distance from the right */
+    color: black; /* Color of the close icon */
+    z-index: 1001; /* Ensure it appears above other content */
+  }
+  /* Ensure there's padding around the content */
+.popup-content {
+  padding: 20px; /* Ensures space for the icon */
+}

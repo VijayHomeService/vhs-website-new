@@ -76,93 +76,95 @@ function Homelogin() {
   };
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-12">
-          <div
-            className="row"
-            style={{ justifyContent: "center", alignItems: "center" }}
-          >
+    <>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
             <div
-              className="col-md-5"
-              style={{
-                marginTop: "10%",
-                border: "1px solid grey",
-                padding: "20px",
-                borderRadius: "5px",
-              }}
+              className="row"
+              style={{ justifyContent: "center", alignItems: "center" }}
             >
               <div
-                className="row"
-                style={{ justifyContent: "center", alignItems: "center" }}
+                className="col-md-5"
+                style={{
+                  marginTop: "10%",
+                  border: "1px solid grey",
+                  padding: "20px",
+                  borderRadius: "5px",
+                }}
               >
-                <img
-                  src="./images/vhs.png"
-                  style={{
-                    width: "110px",
-                    height: "90px",
-                    textAlign: "center",
-                  }}
-                  alt="VHS Logo"
-                />
-
                 <div
-                  className="mt-3 poppins-semibold"
-                  style={{
-                    color: "black",
-                    fontSize: "17px",
-                    textAlign: "center",
-                    // fontWeight: "bold",
-                  }}
+                  className="row"
+                  style={{ justifyContent: "center", alignItems: "center" }}
                 >
-                  Book With Mobile Number
-                </div>
+                  <img
+                    src="./images/vhs.webp"
+                    style={{
+                      width: "110px",
+                      height: "90px",
+                      textAlign: "center",
+                    }}
+                    alt="VHS Logo"
+                  />
 
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setname(e.target.value)}
-                  placeholder="Enter Name"
-                  style={{
-                    border: "1px solid grey",
-                    height: "45px",
-                    width: "60%",
-                    marginTop: "15px",
-                  }}
-                />
+                  <div
+                    className="mt-3 poppins-semibold"
+                    style={{
+                      color: "black",
+                      fontSize: "17px",
+                      textAlign: "center",
+                      // fontWeight: "bold",
+                    }}
+                  >
+                    Book With Mobile Number
+                  </div>
 
-                <input
-                  type="text"
-                  value={mainContact}
-                  onChange={(e) => setMainContact(e.target.value)}
-                  placeholder="Enter Mobile Number"
-                  style={{
-                    border: "1px solid grey",
-                    height: "45px",
-                    width: "60%",
-                  }}
-                />
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setname(e.target.value)}
+                    placeholder="Enter Name"
+                    style={{
+                      border: "1px solid grey",
+                      height: "45px",
+                      width: "60%",
+                      marginTop: "15px",
+                    }}
+                  />
 
-                <div
-                  onClick={sendOTP}
-                  className="mb-2 poppins-black"
-                  style={{
-                    textAlign: "center",
-                    color: "white",
-                    fontSize: "14px",
-                    backgroundColor: "darkred",
-                    padding: "5px",
-                    width: "60%",
-                    borderRadius: "5px",
-                  }}
-                >
-                  Next
+                  <input
+                    type="text"
+                    value={mainContact}
+                    onChange={(e) => setMainContact(e.target.value)}
+                    placeholder="Enter Mobile Number"
+                    style={{
+                      border: "1px solid grey",
+                      height: "45px",
+                      width: "60%",
+                    }}
+                  />
+
+                  <div
+                    onClick={sendOTP}
+                    className="mb-2 poppins-black"
+                    style={{
+                      textAlign: "center",
+                      color: "white",
+                      fontSize: "14px",
+                      backgroundColor: "darkred",
+                      padding: "5px",
+                      width: "60%",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    Next
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
+        {/* New Text Content with Auto Pulse Effect */}
         <div
           className="text-container"
           style={{
@@ -175,11 +177,16 @@ function Homelogin() {
           }}
         >
           <p style={{ margin: "0", color: "#004aad" }}>
-            "Diwali Ki <span style={{ color: "#960f14" }}>SAFAI</span>
+            "We offer<span style={{ color: "#960f14" }}>  Top Quality</span>
           </p>
-          <p style={{ margin: "0", color: "#004aad" }}>Hamare Sath"</p>
-          <style>
-            {`
+          <p style={{ margin: "0", color: "#004aad" }}>Services"</p>
+        </div>
+      </div>
+
+      <div>
+        {/* Inline CSS for Pulse Animation */}
+        <style>
+          {`
             @keyframes pulse {
               0% {
                 transform: scale(1);
@@ -192,10 +199,9 @@ function Homelogin() {
               }
             }
           `}
-          </style>
-        </div>
+        </style>
       </div>
-    </div>
+    </>
   );
 }
 

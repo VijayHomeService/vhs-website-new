@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Pheader from "./Pheader";
 import Pmobileheader from "./Pmobileheader";
 import Footer from "./Footer";
-import pcity from "../../src/assets1/pcity.jpg";
+import pcity from "../../src/assets1/pcity1.jpg";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -80,6 +80,8 @@ function Phome() {
   const [contact, setcontact] = useState("");
   const [slidesPerView, setSlidesPerView] = useState(3);
 
+  console.log("selectedCity", selectedCity);
+
   const [CouponApplybtn, setCouponApplyBtn] = useState("");
   const userString = localStorage.getItem("user");
   const user = JSON.parse(userString);
@@ -138,6 +140,8 @@ function Phome() {
       setalladdons(res.data);
     }
   };
+
+  console.log("alladdons", alladdons);
 
   const multilayerSwitch = () => {
     setmultilayer((previousState) => !previousState);
@@ -201,6 +205,7 @@ function Phome() {
   }, []);
 
   const handleAddToCartaddons = (item) => {
+    console.log("item,", item);
     dispatch(
       addToPMAddonsCart({
         id: item?._id,
@@ -213,6 +218,7 @@ function Phome() {
   };
 
   const PMAddonsItems = useSelector((state) => state.addons);
+  console.log("PMAddonsItems", PMAddonsItems);
 
   const PMAddonstotal = PMAddonsItems.reduce((accumulator, item) => {
     const offerPrice = parseFloat(item?.offerPrice);
@@ -226,6 +232,8 @@ function Phome() {
       return accumulator;
     }
   }, 0);
+
+  console.log("PMAddonstotal", PMAddonstotal);
 
   const getCategories = async () => {
     try {
@@ -260,14 +268,28 @@ function Phome() {
   };
   const totalItems = calculateQty();
 
+  // Update this function to handle active subcategory
   const handleSubcategoryClick = (subcategory) => {
+    // Toggle logic: if the subcategory clicked is the active one, collapse it, otherwise expand the new one
     setActiveSubcategory((prevSubcategory) =>
       prevSubcategory === subcategory ? null : subcategory
     );
   };
 
+  // const handleCategoryClick = (category) => {
+  //   setActiveCategory(category);
+
+  //   // Scroll to the corresponding category heading
+  //   if (categoryRefs.current[category]) {
+  //     categoryRefs.current[category].scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "start",
+  //     });
+  //   }
+  // };
+
   const handleCategoryClick = (category) => {
-    setActiveCategory(category);
+    setActiveCategory(category); // Set the active category
   };
 
   const handleAddToCart = (item, category, subcategory) => {
@@ -307,6 +329,38 @@ function Phome() {
   const filteredItems = itemsData.filter((item) =>
     item.itemname.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // const groupedItems = filteredItems.reduce((acc, item) => {
+  //   const {
+  //     category,
+  //     subcategory,
+  //     _id,
+  //     itemname,
+  //     offerPrice,
+  //     volume,
+  //     weight,
+  //     packingPrice,
+  //   } = item;
+
+  //   if (!acc[category]) {
+  //     acc[category] = {};
+  //   }
+
+  //   if (!acc[category][subcategory]) {
+  //     acc[category][subcategory] = [];
+  //   }
+
+  //   acc[category][subcategory].push({
+  //     _id,
+  //     itemname,
+  //     offerPrice,
+  //     volume,
+  //     weight,
+  //     packingPrice,
+  //   });
+
+  //   return acc;
+  // }, {});
 
   const groupedItems = filteredItems.reduce((acc, item) => {
     const {
@@ -523,8 +577,6 @@ function Phome() {
       ? appliedValue.toFixed(2) // Use appliedValue if a coupon is applied
       : GrandTotal.toFixed(2);
 
-  console.log("distanceInKm", distanceInKm);
-
   const handleSubmit1 = async (e) => {
     e.preventDefault();
     if (!selectedDate) {
@@ -533,7 +585,7 @@ function Phome() {
     }
 
     let GT = GrandTotal + PMAddonstotal;
-
+    console.log("GT", GT);
     try {
       // setloader(true);
       const config = {
@@ -597,6 +649,8 @@ function Phome() {
       }
     }
   };
+
+  console.log("selectedDate", selectedDate);
 
   // const handleSubmit1 = async (e) => {
   //   e.preventDefault();
@@ -708,6 +762,8 @@ function Phome() {
   const handledropfloor = () => {
     setdropfloor(!dropfloor);
   };
+
+  console.log("amount", amount);
 
   return (
     <div className="">
@@ -2158,7 +2214,7 @@ function Phome() {
                     cursor: "pointer",
                   }}
                 >
-                  Book Now
+                  Pay Now
                 </div>
 
                 <Modal

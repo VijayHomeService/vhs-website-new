@@ -926,83 +926,79 @@ function Summary() {
 
   const handleSubmit1 = async (e) => {
     e.preventDefault();
-    if (!selectedAddress || !selectedSlotText) {
-      alert("Please select address and time slots");
-    } else {
-      const paydata1 = {
-        customerData: {
-          _id: user?._id,
-          EnquiryId: user?.EnquiryId,
-          customerName: user?.customerName,
-          category: user?.category,
-          mainContact: user?.mainContact,
-          email: user?.email,
-          approach: user?.approach,
-        },
-        dividedDates: dividedDates.length ? dividedDates : [selectedDate],
-        customerName: customerName,
-        email: email,
-        dividedamtCharges: dividedamtCharges,
-        dividedamtDates: dividedamtDates,
-        cardNo: user?.cardNo,
-        category: MyCartItmes[0]?.service?.category,
-        contractType: "One Time",
-        service: MyCartItmes[0]?.service?.serviceName,
-        serviceID: MyCartItmes[0]?.service?._id,
-        serviceCharge: DiscountAmount,
-        dateofService: selectedDate,
-        selectedSlotText: selectedSlotText,
-        serviceFrequency: 1,
-        startDate: selectedDate,
-        expiryDate: selectedDate,
-        firstserviceDate: selectedDate,
-        date: moment().format("YYYY-MM-DD"),
-        time: moment().format("LT"),
-        type: "website",
-        reference: utm_source ? utm_source : storedQuery,
-        city: capscity,
-        userId: user?._id,
-        discAmt: couponPercentage,
-        GrandTotal: a,
-        paymentMode: "online",
-        TotalAmt: plan.pPrice,
-        couponCode: voucherCodeValue,
-        totalSaved: savedamount,
-        markerCoordinate: selectedAddress?.markerCoordinate,
-        deliveryAddress: selectedAddress,
-        amount: a,
-        number: "8951592630",
-        MUID: "MUID" + Date.now(),
-        transactionId: "T" + Date.now(),
-      };
+    const paydata1 = {
+      customerData: {
+        _id: user?._id,
+        EnquiryId: user?.EnquiryId,
+        customerName: user?.customerName,
+        category: user?.category,
+        mainContact: user?.mainContact,
+        email: user?.email,
+        approach: user?.approach,
+      },
+      dividedDates: dividedDates.length ? dividedDates : [selectedDate],
+      customerName: customerName,
+      email: email,
+      dividedamtCharges: dividedamtCharges,
+      dividedamtDates: dividedamtDates,
+      cardNo: user?.cardNo,
+      category: MyCartItmes[0]?.service?.category,
+      contractType: "One Time",
+      service: MyCartItmes[0]?.service?.serviceName,
+      serviceID: MyCartItmes[0]?.service?._id,
+      serviceCharge: DiscountAmount,
+      dateofService: selectedDate,
+      selectedSlotText: selectedSlotText,
+      serviceFrequency: 1,
+      startDate: selectedDate,
+      expiryDate: selectedDate,
+      firstserviceDate: selectedDate,
+      date: moment().format("YYYY-MM-DD"),
+      time: moment().format("LT"),
+      type: "website",
+      reference: utm_source ? utm_source : storedQuery,
+      city: capscity,
+      userId: user?._id,
+      discAmt: couponPercentage,
+      GrandTotal: a,
+      paymentMode: "online",
+      TotalAmt: plan.pPrice,
+      couponCode: voucherCodeValue,
+      totalSaved: savedamount,
+      markerCoordinate: selectedAddress?.markerCoordinate,
+      deliveryAddress: selectedAddress,
+      amount: a,
+      number: "8951592630",
+      MUID: "MUID" + Date.now(),
+      transactionId: "T" + Date.now(),
+    };
 
-      const updatedRedirectUrl = `https://api.vijayhomeservicebengaluru.in/api/payment/handlepaystatus/${paydata1.transactionId}/${paydata1.userId}/${paydata1.serviceID}`;
+    const updatedRedirectUrl = `https://api.vijayhomeservicebengaluru.in/api/payment/handlepaystatus/${paydata1.transactionId}/${paydata1.userId}/${paydata1.serviceID}`;
 
-      const paymentString = new URLSearchParams({
-        merchant_id: paymentData.merchant_id,
-        order_id: paymentData.order_id,
-        currency: paymentData.currency,
-        amount: a,
-        redirect_url: updatedRedirectUrl,
-        cancel_url: paymentData.cancel_url,
-        language: paymentData.language,
-      }).toString();
+    const paymentString = new URLSearchParams({
+      merchant_id: paymentData.merchant_id,
+      order_id: paymentData.order_id,
+      currency: paymentData.currency,
+      amount: a,
+      redirect_url: updatedRedirectUrl,
+      cancel_url: paymentData.cancel_url,
+      language: paymentData.language,
+    }).toString();
 
-      try {
-        const response = await axios.post(
-          "https://api.vijayhomeservicebengaluru.in/api/payment/ccavenueinitiate",
-          { payment_string: paymentString, updateddata: paydata1 }
-        );
+    try {
+      const response = await axios.post(
+        "https://api.vijayhomeservicebengaluru.in/api/payment/ccavenueinitiate",
+        { payment_string: paymentString, updateddata: paydata1 }
+      );
 
-        if (response && response.data && response.data.url) {
-          window.location.href = response.data.url;
-        }
-      } catch (error) {
-        console.error(
-          "Error initiating payment:",
-          error.response || error.message || error
-        );
+      if (response && response.data && response.data.url) {
+        window.location.href = response.data.url;
       }
+    } catch (error) {
+      console.error(
+        "Error initiating payment:",
+        error.response || error.message || error
+      );
     }
   };
 
@@ -2421,9 +2417,9 @@ function Summary() {
                 }}
               >
                 <p style={{ margin: "0", color: "#004aad" }}>
-                  "Diwali Ki <span style={{ color: "#960f14" }}>SAFAI</span>
+                  "We deliver  <span style={{ color: "#960f14" }}>Top Quality</span>
                 </p>
-                <p style={{ margin: "0", color: "#004aad" }}>Hamare Sath"</p>
+                <p style={{ margin: "0", color: "#004aad" }}>Service"</p>
                 <style>
                   {`
             @keyframes pulse {

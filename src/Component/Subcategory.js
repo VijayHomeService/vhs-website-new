@@ -36,6 +36,11 @@ import ReactHlsPlayer from "react-hls-player";
 import subcall from "../../src/assests/subcall.gif";
 import subweb from "../../src/assests/subweb.gif";
 import moment from "moment";
+import { Helmet } from "react-helmet-async";
+import contentMapping from '../content/contentMapping';
+import '../content/contentMapping.css';
+import seoMapping from '../content/seoMapping'
+
 
 function capitalizeFirstLetter1(string) {
   if (typeof string !== "string" || string.length === 0) {
@@ -52,20 +57,18 @@ const capitalizeWords = (str) => {
     .join(" ");
 };
 
-function Subcategory() {
+function Subcategory( ) {
+  
+  
   const { subcategory } = useParams();
   const location = useLocation();
+ 
 
-  const currentURL = window.location.href;
+
+  console.log("subcategory", subcategory);
+ 
 
   const queryString = window.location.search;
-
-  localStorage.setItem("currentURL", currentURL);
-  const currentURLdata = localStorage.getItem("currentURL");
-
-  console.log("Current URL stored in localStorage:", currentURLdata);
-
-  console.log("currentURL", currentURL);
 
   const getQueryParams = (queryString, param) => {
     const params = new URLSearchParams(queryString);
@@ -80,8 +83,6 @@ function Subcategory() {
     }
   }, [utmSource]);
 
-  const localutm = localStorage.getItem("utm_source");
-
   useEffect(() => {
     const fullQueryString = location.search;
 
@@ -90,35 +91,12 @@ function Subcategory() {
     }
   }, [location]);
 
+   
+  //const { subcategory } = useParams(); // Fetch dynamic params (e.g., "cleaning-in-bangalore")
+  const [serviceData, setServiceData] = useState(null);
+  const [city, setCity] = useState(null);
+  
   const storedQuery = localStorage.getItem("fullQuery");
-
-  const getQueryParams1 = (queryString, param) => {
-    const params = new URLSearchParams(queryString);
-    return params.get(param);
-  };
-  const utmcampaign = getQueryParams1(queryString, "utm_campaign");
-
-  useEffect(() => {
-    if (utmcampaign) {
-      localStorage.setItem("utm_campaign", utmcampaign);
-    }
-  }, [utmcampaign]);
-
-  const localutmcampaign = localStorage.getItem("utm_campaign");
-
-  const getQueryParams2 = (queryString, param) => {
-    const params = new URLSearchParams(queryString);
-    return params.get(param);
-  };
-  const utmcontent = getQueryParams2(queryString, "utm_content");
-
-  useEffect(() => {
-    if (utmcontent) {
-      localStorage.setItem("utm_content", utmcontent);
-    }
-  }, [utmcontent]);
-
-  const localutmcontent = localStorage.getItem("utm_content");
 
   const [subcategoryData, setSubcategoryData] = useState([]);
 
@@ -135,8 +113,7 @@ function Subcategory() {
   const handleenquiryClose = () => setenquiryshow(false);
   const handleenquiryShow = () => setenquiryshow(true);
   const dispatch = useDispatch();
-  const [serviceData, setserviceData] = useState([]);
-  const [selectedServiceName, setSelectedServiceName] = useState("");
+
 
   const [isLoading, setIsLoading] = useState(true);
   const [Item, setItem] = useState([]);
@@ -162,7 +139,10 @@ function Subcategory() {
   const [faq, setfaq] = useState([]);
   const [review, setreview] = useState([]);
   const navigate = useNavigate();
-  const [city, setCity] = useState("");
+  //SEO
+ 
+ 
+
   const [Bannermidledata, setBannermidledata] = useState([]);
   const [name, setname] = useState("");
   const [mobilenumber, setmobilenumber] = useState("");
@@ -190,6 +170,8 @@ function Subcategory() {
       navigate("/login", { state: { city: City } });
     }
   };
+
+  console.log("subcategoryData", subcategoryData);
 
   const transformedFaqData = {
     rows: faq.map((f) => ({
@@ -274,8 +256,7 @@ function Subcategory() {
         "Appliance Service",
         "Facility Management",
       ];
-
-      const categoryNamecheck = services.find((service) =>
+  const categoryNamecheck = services.find((service) =>
         service.toLowerCase().includes(category1.toLowerCase())
       );
 
@@ -325,11 +306,13 @@ function Subcategory() {
     0
   );
 
-  let SelectedService = serviceData
-    .map((serivice) =>
-      serivice.morepriceData.filter((paln) => paln._id === SelectService)
-    )
-    .flatMap((cart) => cart);
+  let SelectedService = serviceData && Array.isArray(serviceData)
+  ? serviceData
+      .map((service) =>
+        service.morepriceData?.filter((plan) => plan._id === SelectService) || []
+      )
+      .flatMap((cart) => cart) || []
+  : []; // Return an empty array if serviceData is null or not an array
 
   const handleAdd = (e, data, index) => {
     e.preventDefault();
@@ -603,6 +586,8 @@ function Subcategory() {
     });
   };
 
+  console.log("sub", sub);
+
   useEffect(() => {
     getbannerimg();
   }, [offerBannerdata]);
@@ -641,95 +626,28 @@ function Subcategory() {
   };
 
   const generatePathname = (subcategory, city) => {
-    return `/services/${subcategory.toLowerCase().replace(/ /g, "-")}-in-${city
-      .toLowerCase()
-      .replace(/ /g, "-")}`;
+    // Clean and format the subcategory and city
+    const cleanSubcategory = subcategory.toLowerCase().trim().replace(/\s+/g, '-');
+    const cleanCity = city.toLowerCase().trim().replace(/\s+/g, '-');
+    
+    // Generate clean URL without multiple "in" segments
+    return `/services/${cleanSubcategory}-in-${cleanCity}`;
+  };
+  
+  const generatePathname1 = (serviceName, city) => {
+    // Clean and format the service name and city
+    const cleanServiceName = serviceName.toLowerCase().trim().replace(/\s+/g, '-');
+    const cleanCity = city?.toLowerCase().trim().replace(/\s+/g, '-') || '';
+    
+   
   };
 
-  const generatePathname1 = (serviceName, capitalizedCity) => {
-    let cleanedSubcategory = serviceName.trim();
-    if (cleanedSubcategory.startsWith("-")) {
-      cleanedSubcategory = cleanedSubcategory.substring(1);
-    }
-
-    // Generate the URL
-    return `/viewdetails/${cleanedSubcategory
-      .toLowerCase()
-      .replace(/ /g, "-")}-in-${capitalizedCity
-      ?.toLowerCase()
-      .replace(/ /g, "-")}`;
-  };
-
-  // const addsurvey = async (e, serviceName) => {
-  //   e.preventDefault();
-  //   console.log("selectedServiceName====", serviceName);
-  //   if (!name || !mobilenumber) {
-  //     alert("Please fill in all fields");
-  //     return;
-  //   }
-  //   const phoneRegex = /^[6-9]\d{9}$/;
-  //   if (!phoneRegex.test(mobilenumber)) {
-  //     alert("Please enter a valid 10-digit mobile number");
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     const config = {
-  //       url: "https://api.vijayhomeservicebengaluru.in/api/addnewenquiry",
-  //       method: "post",
-  //       headers: { "Content-Type": "application/json" },
-  //       data: {
-  //         mobile: mobilenumber,
-  //         name: name,
-  //         category: "Painting",
-  //         city: capitalizedCity,
-  //         date: moment().format("MM-DD-YYYY"),
-  //         Time: moment().format("h:mm:ss a"),
-  //         reference1: "website",
-  //         reference2: localutm,
-  //         // reference3: localutmcampaign,
-  //         reference5: localutmcampaign,
-  //         reference4: localutmcontent,
-  //         formdetails: serviceName,
-  //         Tag : ""
-  //       },
-  //     };
-
-  //     const response = await axios(config);
-
-  //     if (response.status === 200) {
-  //       setenquiryshow(false);
-  //       addenquiryfollowup1(response.data.data);
-  //       // alert("Enquiry added successfully");
-  //     } else {
-  //       alert(`Unexpected response: ${response.status}`);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     if (error.response) {
-  //       alert(
-  //         `Error: ${error.response.data.message || "Failed to add enquiry"}`
-  //       );
-  //     } else if (error.request) {
-  //       alert("No response received. Please check your network connection.");
-  //     } else {
-  //       alert("An error occurred: " + error.message);
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  const addsurvey = async (e, serviceName) => {
+  const addsurvey = async (e) => {
     e.preventDefault();
-    console.log("selectedServiceName====", serviceName);
-
     if (!name || !mobilenumber) {
       alert("Please fill in all fields");
       return;
     }
-
     const phoneRegex = /^[6-9]\d{9}$/;
     if (!phoneRegex.test(mobilenumber)) {
       alert("Please enter a valid 10-digit mobile number");
@@ -738,72 +656,6 @@ function Subcategory() {
 
     try {
       setLoading(true);
-
-      // Extract UTM parameters from the current URL
-      const queryParams = new URLSearchParams(window.location.search);
-      const utmSource = queryParams.get("utm_source") || "";
-      const utmMedium = queryParams.get("utm_medium") || "";
-      const utmCampaign = queryParams.get("utm_campaign") || "";
-      const utmContent = queryParams.get("utm_content") || "";
-      const gclid = queryParams.get("gclid") || "";
-      const referringDomain = document.referrer || "";
-
-      // Recognized social networks
-      const socialNetworks = [
-        "facebook.com",
-        "twitter.com",
-        "linkedin.com",
-        "instagram.com",
-      ];
-
-      // Determine the Tag value
-      let Tag = "";
-
-      // Organic social
-      if (
-        (utmMedium === "social" &&
-          socialNetworks.some((network) =>
-            referringDomain.includes(network)
-          )) ||
-        (utmMedium === "social" && socialNetworks.includes(utmSource))
-      ) {
-        Tag = "Organic social";
-      }
-      // Paid search
-      else if (
-        gclid || // Google Click ID is present
-        utmSource.toLowerCase().includes("adword") ||
-        utmSource.toLowerCase().includes("ppc") ||
-        utmSource.toLowerCase().includes("cpc") ||
-        (utmMedium.toLowerCase().includes("search") &&
-          utmSource.toLowerCase().includes("google")) ||
-        (utmSource === "google.com" && (utmMedium || utmCampaign))
-      ) {
-        Tag = "Paid search";
-      }
-      // Paid social
-      else if (
-        (utmMedium.toLowerCase().includes("paid") ||
-          utmMedium.toLowerCase().includes("ppc") ||
-          utmMedium.toLowerCase().includes("cpc")) &&
-        socialNetworks.some(
-          (network) =>
-            utmSource === network || referringDomain.includes(network)
-        )
-      ) {
-        Tag = "Paid social";
-      }
-      // Default Organic social for other social traffic
-      else if (
-        socialNetworks.some((network) => referringDomain.includes(network))
-      ) {
-        Tag = "Organic social";
-      }
-
-      console.log("Final Tag value:", Tag);
-      localStorage.setItem("Tag", Tag);
-
-      // API request
       const config = {
         url: "https://api.vijayhomeservicebengaluru.in/api/addnewenquiry",
         method: "post",
@@ -816,11 +668,6 @@ function Subcategory() {
           date: moment().format("MM-DD-YYYY"),
           Time: moment().format("h:mm:ss a"),
           reference1: "website",
-          reference2: localutm,
-          reference5: localutmcampaign,
-          reference4: localutmcontent,
-          intrestedfor: serviceName,
-          Tag: Tag, // Pass the computed Tag here
         },
       };
 
@@ -829,6 +676,7 @@ function Subcategory() {
       if (response.status === 200) {
         setenquiryshow(false);
         addenquiryfollowup1(response.data.data);
+        // alert("Enquiry added successfully");
       } else {
         alert(`Unexpected response: ${response.status}`);
       }
@@ -859,7 +707,7 @@ function Subcategory() {
         data: {
           EnquiryId: edata?.EnquiryId,
           folldate: moment().format("llll"),
-          response: "New",
+          response: "Survey",
           category: "Painting",
           city: capitalizedCity,
           nxtfoll: moment().format("YYYY-MM-DD"),
@@ -878,8 +726,126 @@ function Subcategory() {
     }
   };
 
+  const {city1} = useState("");
+  
+ const {cityName} = useState('');
+// Format subcategory and city names
+const formattedsubcategory = subcategory ? subcategory.toLowerCase().replace(/ /g, "-") : ""; // Use a fallback
+const formattedCityName = cityName ? cityName.toLowerCase().replace(/ /g, "-") : ""; // Use a fallback
+
+
+
+ console.log("Formatted Subcategory:", formattedsubcategory);
+console.log("Available Keys in seoMapping:", Object.keys(seoMapping));
+
+const staticcityName = "Bangalore"; // Replace with dynamic data as needed
+const subcategoryKey = 'bathroom-cleaning-in-bangalore'; // Example subcategory key
+
+// Get meta data based on the subcategory, or default if not found
+const meta =
+seoMapping[formattedsubcategory]?.meta || seoMapping[formattedsubcategory] || {
+  title: "Expert Home Services Up to 60% OFF - Vijay Home Services",
+  description: "Experience top-notch home services cleaning, painting, pest control,etc. Lowest Price in Market | ISO Certified Company. Trained Professionals | No Sub Contract. 100% Satisfaction or FREE Rework*.",
+  keywords: "home services, cleaning services, pest control, painting services, home repairs, maintenance services, eco-friendly cleaning, affordable home care, reliable home solutions, expert home services, one-stop home services, Vijay Home Services, professional home care, quality home services.",
+};
+
+ 
+
+ // Replace placeholders with dynamic city name
+ const metaTitle = meta.title.replace(/{cityName}/g, cityName);
+ const metaDescription = meta.description.replace(/{cityName}/g, cityName);
+ const metaKeywords = meta.keywords.replace(/{cityName}/g, cityName);
+
+// Generate the URL
+const url = `/services/${formattedsubcategory}`;
+
+const [serviceContent, setServiceContent] = useState(null);
+const cleanedSubcategory = subcategory.trim();  
+console.log("lllllllllllllllllllllllllllllllll",cleanedSubcategory);
+const [serviceSlug, locationSlug] = cleanedSubcategory.split("-in-");
+console.log('services:', serviceSlug);
+console.log('services:', locationSlug); 
+  useEffect(() => {
+    let matchedContent = null;
+    Object.values(contentMapping).forEach((category) => {
+      const service = category.find(
+        (item) => item.serviceSlug === serviceSlug.toLowerCase()
+      );
+      if (service) {
+        const location = service.locations.find(
+          (loc) => loc.locationSlug === locationSlug.toLowerCase()
+        );
+        if (location) {
+          matchedContent = location;
+        }
+      }
+    });
+
+    if (matchedContent) {
+      setServiceContent(matchedContent);
+      setCity(locationSlug);
+    } else {
+      console.error("No matching content found.");
+      // Set default content when no match is found
+      setServiceContent({
+        title: `Vijay Home Services - Professional Home Solutions for a Better Living`,
+        description: [
+            `Vijay Home Services offers a wide range of professional home solutions designed to make your living space more comfortable, clean, and well-maintained. From deep cleaning and pest control to painting and general repairs, we provide expert services tailored to meet the unique needs of your home. Our team of skilled professionals uses high-quality, eco-friendly products and advanced tools to ensure outstanding results every time. With affordable pricing, flexible scheduling, and customer-first support, Vijay Home Services is your trusted partner for all your home service needs. Whether it's a one-time project or regular maintenance, we deliver reliable, efficient, and hassle-free solutions.`,
+        ],
+        contentkey1: `Benefits of Choosing Vijay Home Services`,
+        contentlist1: [
+          `Convenience: A one-stop solution for all home services, including cleaning, pest control, painting, repairs, and more.`,
+          `Quality Assurance: Skilled professionals and high-quality standards ensure satisfaction with every service.`,
+          `Eco-Friendly & Safe: We use non-toxic, government-approved chemicals and eco-friendly materials for safety and environmental care.`,
+          `Affordable Pricing: With up to 60% discounts on selected services, our pricing is transparent and competitive.`,
+          `End-to-End Solutions: From pre-assessment to post-service checks, we handle every detail, ensuring a hassle-free experience.`
+          
+        ],
+        contentkey2: `Why Choose Vijay Home Services?`,
+        contentlist2: [
+            `Vijay Home Services is known for reliability, quality, and efficiency across all home maintenance needs. Our team of certified professionals brings expertise and attention to detail to each service, whether it’s a quick fix or a major project. With a customer-first approach, we prioritize your needs to provide customized services that keep your home comfortable, clean, and in optimal condition.`,
+            
+        ],
+        contentkey3: `How Our Process Works`,
+        contentlist3: [
+            `1. Book Your Service: Call us at 8453748478 or book online at your preferred time.`,
+            `2. Needs Assessment: We assess your requirements and tailor our services to meet your expectations.`,
+            `3. Execution by Experts: Trained professionals arrive on time, equipped with the latest tools and techniques to complete the job efficiently.`,
+            `4. Quality Check: A thorough quality check ensures all work is up to standard, and any concerns are promptly addressed.`,
+            `5. After-Service Support: For any follow-ups or maintenance, we’re here to assist you with ongoing care.`
+
+            
+        ],
+        contentkey4: "How Our Process Works",
+        contentlist4: [
+            "Request a Service: Book our home cleaning service through our website or by phone.",
+            "Receive Confirmation: We’ll send a quote and confirm details based on your needs.",
+            "Execution: Our team arrives on time, fully equipped to provide a thorough, efficient experience.",
+            "Easy Payment: We accept multiple payment methods for your convenience."
+        ],
+        contentkey5: `For reliable, efficient, and affordable home services, reach out to Vijay Home Services at 8453748478. With a broad spectrum of services, including home cleaning, pest control, painting, repairs, and more, we are here to make home maintenance easy and accessible.`
+      });
+    }
+  }, [subcategory, serviceSlug, locationSlug, contentMapping]);
+
+
+  if (serviceContent === null) {
+    return <div>Loading or No content found for {subcategory}</div>;
+  }
+  console.log('services:', serviceContent);
+
+
+
+    
   return (
     <div>
+       <Helmet>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta name="keywords" content={metaKeywords} />
+        <link rel="canonical" href={`https://www.vijayhomeservices.com${url}`} />
+      </Helmet> 
+
       {isLoading ? (
         <>
           <div className="row m-auto text-center" style={{ height: "100vh" }}>
@@ -1074,10 +1040,7 @@ function Subcategory() {
 
                           <div style={{ marginLeft: "40px" }}>
                             <a
-                              // href="https://wa.me/919611600990?text=Hi%20I'm%20looking%20for%20the%20services%20from%20you,%20Please%20reach%20out%20to%20me%20soon"
-                              href={`https://wa.me/919611600990?text=Hi%20I'm%20looking%20for%20the%20services%20from%20you,%20Please%20reach%20out%20to%20me%20soon.%20${encodeURIComponent(
-                                currentURL
-                              )}`}
+                              href="https://wa.me/919611600990?text=Hi%20I'm%20looking%20for%20the%20services%20from%20you,%20Please%20reach%20out%20to%20me%20soon"
                               style={{
                                 textDecoration: "none",
                                 color: "inherit",
@@ -1389,11 +1352,7 @@ function Subcategory() {
                               <div className="col-md-3 mt-4 mb-3 ">
                                 {data.category === "Painting" ? (
                                   <div
-                                    // onClick={handleenquiryShow}
-                                    onClick={() => {
-                                      setSelectedServiceName(data.serviceName); // Set the selected service name
-                                      handleenquiryShow(); // Open the modal
-                                    }}
+                                    onClick={handleenquiryShow}
                                     className="poppins-regular mx-4"
                                     style={{
                                       color: "blue",
@@ -1467,7 +1426,6 @@ function Subcategory() {
                                   onClick={() => {
                                     if (data.category === "Painting") {
                                       setenquiryshow(true);
-                                      setSelectedServiceName(data.serviceName);
                                     } else if (data.morepriceData.length > 0) {
                                       handleBook(data);
                                     } else {
@@ -1485,7 +1443,74 @@ function Subcategory() {
                         </div>
                       ))}
                   </div>
+                  <div className="content-mapping">
+            <h4>{serviceContent.title}</h4>
+            
+            {/* Description */}
+            {serviceContent.description.map((para, index) => (
+                <p key={`description-${index}`}>{para}</p>
+            ))}
 
+            {/* Health Benefits */}
+            <h6>{serviceContent.contentkey1}</h6>
+            {serviceContent.contentlist1.map((para, index) => (
+                <p key={`content-list-1-${index}`}>{para}</p>
+            ))}
+
+            {/* Why Choose Us */}
+            <h6>{serviceContent.contentkey2}</h6>
+            <ul>
+                {serviceContent.contentlist2.map((item, index) => (
+                    <li key={`content-list-2-${index}`}>{item}</li>
+                ))}
+            </ul>
+
+            {/* Benefits of Choosing Vijay Home Services */}
+            <h6>{serviceContent.contentkey3}</h6>
+            <ul>
+                {serviceContent.contentlist3.map((benefit, index) => (
+                    <li key={`content-list-3-${index}`}>{benefit}</li>
+                ))}
+            </ul>
+
+            {/* How Our Process Works */}
+            <h6>{serviceContent.contentkey4}</h6>
+            <ul>
+                {serviceContent.contentlist4.map((step, index) => (
+                    <li key={`content-list-4-${index}`}>{step}</li>
+                ))}
+            </ul>
+
+            {/* Conclusion */}
+            <h6>{serviceContent.contentkey5}</h6>
+            {serviceContent.contentlist5 && serviceContent.contentlist5.length > 0 && (
+    <ul>
+        {serviceContent.contentlist5.map((step, index) => (
+            <li key={`content-list-5-${index}`}>{step}</li>
+        ))}
+    </ul>
+    
+)}
+ <h6>{serviceContent.contentkey6}</h6>
+            {serviceContent.contentlist6 && serviceContent.contentlist6.length > 0 && (
+            <ul>
+                 {serviceContent.contentlist6.map((step, index) => (
+                  <li key={`content-list-6-${index}`}>{step}</li>
+                    ))}
+             </ul>
+            )}
+
+            <h6>{serviceContent.contentkey7}</h6>
+            {serviceContent.contentlist7 && serviceContent.contentlist7.length > 0 && (
+            <ul>
+                 {serviceContent.contentlist7.map((step, index) => (
+                  <li key={`content-list-7-${index}`}>{step}</li>
+                    ))}
+             </ul>
+            )}
+        </div>
+
+  
                   <div
                     className="row mt-5 mb-5 "
                     style={{
@@ -1589,10 +1614,7 @@ function Subcategory() {
                       </a>
 
                       <a
-                        // href="https://wa.me/919611600990?text=Hi%20I'm%20looking%20for%20the%20services%20from%20you,%20Please%20reach%20out%20to%20me%20soon"
-                        href={`https://wa.me/919611600990?text=Hi%20I'm%20looking%20for%20the%20services%20from%20you,%20Please%20reach%20out%20to%20me%20soon.%20${encodeURIComponent(
-                          currentURL
-                        )}`}
+                        href="https://wa.me/919611600990?text=Hi%20I'm%20looking%20for%20the%20services%20from%20you,%20Please%20reach%20out%20to%20me%20soon"
                         style={{
                           textDecoration: "none",
                           color: "inherit",
@@ -1941,11 +1963,7 @@ function Subcategory() {
                               <div className="col-md-3 mt-4 mb-3 ">
                                 {data.category === "Painting" ? (
                                   <div
-                                    // onClick={handleenquiryShow}
-                                    onClick={() => {
-                                      setSelectedServiceName(data.serviceName); // Set the selected service name
-                                      handleenquiryShow(); // Open the modal
-                                    }}
+                                    onClick={handleenquiryShow}
                                     className="poppins-regular mx-4"
                                     style={{
                                       color: "blue",
@@ -2019,7 +2037,6 @@ function Subcategory() {
                                   onClick={() => {
                                     if (data.category === "Painting") {
                                       setenquiryshow(true);
-                                      setSelectedServiceName(data.serviceName);
                                     } else if (data.morepriceData.length > 0) {
                                       handleBook(data);
                                     } else {
@@ -2037,7 +2054,7 @@ function Subcategory() {
                         </div>
                       ))}
                   </div>
-
+                  
                   <div
                     className="row mt-5 mb-5"
                     style={{
@@ -2469,45 +2486,47 @@ function Subcategory() {
                   })}
                 </Modal.Body>
                 <Modal.Footer className="container p-3 ">
-                  {serviceData.flatMap((service) =>
-                    service.morepriceData
-                      .filter((plan) => plan._id === SelectService)
-
-                      .map((price) => (
-                        <Button
-                          className="col-md-10 m-auto clrstrs"
-                          onClick={() => {
-                            // e.preventDefault();
-                            setOpenViewCartModal(false);
-                          }}
-                        >
-                          {" "}
-                          <Link
-                            to="/ViewCart"
-                            state={{
-                              ServiceIDD: service._id,
-                              PriceID: price._id,
-                              NumberOfQunt: Quantity,
-                            }}
-                            style={{
-                              textDecoration: "none",
-                              color: "white",
-                              border: "none",
-                            }}
-                          >
-                            <p className="row p-1 m-auto">
-                              <span className="col-md-6 m-auto p-0">
-                                View Cart
-                              </span>
-                              <span className="col-md-6 m-auto p-0">
-                                {" "}
-                                Rs.{price.pofferprice}
-                              </span>
-                            </p>
-                          </Link>
-                        </Button>
-                      ))
-                  )}
+                {
+  Array.isArray(serviceData) && serviceData.length > 0 ? (
+    serviceData.flatMap((service) =>
+      service.morepriceData
+        .filter((plan) => plan._id === SelectService)
+        .map((price) => (
+          <Button
+            className="col-md-10 m-auto clrstrs"
+            onClick={() => {
+              setOpenViewCartModal(false);
+            }}
+          >
+            <Link
+              to="/ViewCart"
+              state={{
+                ServiceIDD: service._id,
+                PriceID: price._id,
+                NumberOfQunt: Quantity,
+              }}
+              style={{
+                textDecoration: "none",
+                color: "white",
+                border: "none",
+              }}
+            >
+              <p className="row p-1 m-auto">
+                <span className="col-md-6 m-auto p-0">
+                  View Cart
+                </span>
+                <span className="col-md-6 m-auto p-0">
+                  Rs.{price.pofferprice}
+                </span>
+              </p>
+            </Link>
+          </Button>
+        ))
+    )
+  ) : (
+    <p>No services available</p>
+  )
+}
                 </Modal.Footer>
               </Modal>
 
@@ -2822,8 +2841,7 @@ function Subcategory() {
                   </div>
 
                   <div
-                    // onClick={addsurvey}
-                    onClick={(e) => addsurvey(e, selectedServiceName)}
+                    onClick={addsurvey}
                     className="poppins-black"
                     style={{
                       backgroundColor: "darkred",
@@ -2844,8 +2862,10 @@ function Subcategory() {
           )}
         </>
       )}
+
     </div>
   );
 }
+
 
 export default Subcategory;

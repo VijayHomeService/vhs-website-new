@@ -52,7 +52,7 @@ function Career() {
             </div>
 
             <a
-              href="https://www.linkedin.com/company/vijay-home-services/?viewAsMember=true"
+              href="https://www.linkedin.com/company/vijay-home-services/jobs/?viewAsMember=true"
               style={{ textDecoration: "none" }}
             >
               <div

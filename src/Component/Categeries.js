@@ -67,11 +67,21 @@ function Categeries() {
   };
 
   const generatePathname = (subcategory, city) => {
-    return `/services/${subcategory
+    const sanitizedSubcategory = subcategory
       .toLowerCase()
-      .replace(/ /g, "-")}-in-${activeCity?.toLowerCase().replace(/ /g, "-")}`;
+      .replace(/ /g, "-")
+      .replace(/-in/g, ""); // Remove any existing "-in" from subcategory
+    
+    const sanitizedCity = city
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/-in/g, ""); // Remove any existing "-in" from city
+    
+    return `/services/${sanitizedSubcategory}${sanitizedCity}`;
   };
 
+  console.log("active", activeCity);
+  console.log("categorydata", categorydata);
   return (
     <div>
       <NavbarCompo />

@@ -24,6 +24,8 @@ function Enquiry() {
     getUserData();
   }, []);
 
+  console.log("valuesuman", value?._id);
+
   useEffect(() => {
     if (value) {
       getEnquiry();
@@ -49,6 +51,8 @@ function Enquiry() {
     }, 3000);
     return () => clearTimeout(timer);
   }, []);
+
+  console.log("enquiry=====", enquiry);
 
   return (
     <div className="container">
