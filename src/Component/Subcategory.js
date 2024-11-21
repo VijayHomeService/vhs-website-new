@@ -1621,7 +1621,10 @@ function Subcategory() {
                                     }
                                   }}
                                 >
-                                  Add
+                                  {/* Add */}
+                                  {data.category === "Painting"
+                                    ? "Get Free Estimate"
+                                    : "Add"}
                                 </div>
                               </div>
                             </div>
@@ -2204,7 +2207,10 @@ function Subcategory() {
                                     }
                                   }}
                                 >
-                                  Add
+                                  {/* Add */}
+                                  {data.category === "Painting"
+                                    ? "Get Free Estimate"
+                                    : "Add"}
                                 </div>
                               </div>
                             </div>
